@@ -1,5 +1,7 @@
 import cadquery as cq
 
+# all measurements in mm.
+
 width = 235
 length = 183
 depth = 10
@@ -7,6 +9,7 @@ thickness = 20
 textWidth = thickness *4
 
 screen_standoff_diameter = 2.05
+screen_standoff_hole = 6
 screen_standoff_width = 218.1
 screen_standoff_height = 133
 
@@ -15,6 +18,12 @@ screen_body_height = 2 + 133 + 6.05*2 - screen_standoff_diameter
 screen_body_depth = 5.5
 #screen_body_offset = 5.56
 screen_body_offset = 2.2
+
+screen_belly_width = 50
+screen_belly_height = 80
+# centered in y
+screen_belly_x_offset = 81
+screen_belly_depth = 4
 
 depth = screen_body_depth + 4.2
 
@@ -25,7 +34,22 @@ fin_thickness = 3
 brim_width = 3
 brim_thickness = 2
 
-version = 5
+version = 6
+
+# TODO: bottom frame should tuck under screen
+# edge. Bottom panel should be thinned for
+# placement of connectors and controls.
+# connectors and controls should be selected
+# and placed
+# 4xUSB?
+# Barrel jack DC in.
+# XT-60 out
+# Power button
+# multiple LAN ports
+# WAN port
+# Serial port?
+# Antenna connector?
+# passthrough or connector for keyboard
 
 
 frame = (
@@ -57,12 +81,21 @@ screen_recess = (
     .workplaneFromTagged("recess")
     .rect(screen_standoff_width, screen_standoff_height, forConstruction=True)
     .vertices()
-    .hole(4.5, brim_thickness + screen_body_depth + 4.2)
+    .hole(screen_standoff_hole, brim_thickness + screen_body_depth + 4.2)
     .center(-screen_body_offset,-9)
     )
 
-with_fins = (
+belly_recess = (
     screen_recess
+    .workplaneFromTagged("firstbox")
+    .center(screen_belly_x_offset,0)
+    .rect(screen_belly_width,screen_belly_height)
+    .cutBlind(-screen_belly_depth)
+    .center(-screen_belly_x_offset,0)
+    )
+
+with_fins = (
+    belly_recess
     .faces("<Z", "firstbox")
     .workplane()
     .rarray(150, length-fin_thickness, 2, 2)
