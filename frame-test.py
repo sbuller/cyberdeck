@@ -5,7 +5,7 @@ import cadquery as cq
 width = 235
 length = 183
 depth = 10
-thickness = 20
+thickness = 15
 textWidth = thickness *4
 
 screen_standoff_diameter = 2.05
@@ -63,11 +63,6 @@ frame = (
     .edges("|Z")
     .fillet(14)
     .faces(">Z")
-    .rect(width - thickness*2, length - thickness*2)
-    .cutThruAll()
-    .edges("|Z")
-    .fillet(11 - thickness/4)
-    .faces(">Z")
     .workplane()
     .tag("frame")
     )
@@ -106,18 +101,23 @@ with_fins = (
     .extrude(fin_length)
     )
 
-final = (
+ports = (
     with_fins
-    .workplaneFromTagged("frame")
-    .transformed(
-        offset=(width/2 - textWidth/2,
-                -length/2 + thickness/2,
-                0))
-    .text(f"version: {version}",
-          15,
-          -0.3,
-          font="Thin")
+    .faces(">Z")
+    .workplane()
+    .moveTo(0, 2+(2*screen_body_offset - length - screen_body_height)/4)
+    .rect(width - 30,22)
+    .cutThruAll()
     )
-show_object(final)
+
+final = (
+    ports
+    .faces(">Z")
+    .workplane()
+    .moveTo(screen_body_offset,9)
+    .rect(screen_body_width - thickness*2, screen_body_height - thickness*2)
+    .cutThruAll()
+    )
+
 
 cq.exporters.export(final, "frame-test.stl")
