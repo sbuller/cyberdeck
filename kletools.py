@@ -26,7 +26,7 @@ def parse_kle_positions(layout):
                 i += 1
                 key = row[i]  # Next item should be the key label (or string)
             # Emit current key's position
-            yield (x, y)
+            yield (x + w/2 - 0.5, y)
             x += w  # Move to next key position
             i += 1
         y += 1  # New row
@@ -58,7 +58,7 @@ def parse_kle_stabilizers(layout):
             x_offset = current_props.get('x', 0)
             y_offset = current_props.get('y', 0)
 
-            key_x = x + x_offset
+            key_x = x + x_offset + width / 2 - 0.5
             key_y = y + y_offset
 
             if width >= 2:
