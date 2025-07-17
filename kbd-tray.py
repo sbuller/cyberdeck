@@ -71,17 +71,17 @@ result = (
     .faces(">Z").workplane(-5)
     .moveTo(0,max_y/2 - 5*19.05/8)
     .rect(max_x+19.1,4.75)
-    .extrude(-5)
     # num filler 1&2
     .moveTo(-max_x/2 + .75*19.05, max_y/2)
     .rect(9.5,19.1)
-    .extrude(-5)
     .moveTo(-max_x/2 + 6.25*19.05, max_y/2)
     .rect(9.5,19.1)
-    .extrude(-5)
     # space filler 1&2
-    .moveTo(-max_x/2+4.75*19.05, -max_y/2)
-    .rect(9.5,19)
+    .moveTo(-max_x/2+3.125*19.05, -max_y/2)
+    .rect(4.75,19)
+    .moveTo(-max_x/2+5.625*19.05, -max_y/2)
+    .rect(4.75,19)
+    # extrude all the fillers
     .extrude(-5)
     )
 
