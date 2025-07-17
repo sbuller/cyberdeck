@@ -82,7 +82,23 @@ result = (
     .moveTo(-max_x/2+5.625*19.05, -max_y/2)
     .rect(4.75,19)
     # extrude all the fillers
-    .extrude(-5)
+    .extrude(-5.1)
+    
+    # pocket
+    .faces(">Z").workplane()
+    .moveTo(0,90)
+    .sketch()
+    .rect(220,46)
+    .vertices()
+    .fillet(4)
+    .finalize()
+    .cutThruAll()
+    
+    # pico-bay
+    .faces("<Z").workplane()
+    .moveTo(0,-62)
+    .rect(220,20)
+    .cutBlind(-12)
     )
 
 #show_object(result)
