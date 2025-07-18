@@ -22,7 +22,7 @@ screen_body_offset = 2.2
 screen_belly_width = 50
 screen_belly_height = 80
 # centered in y
-screen_belly_x_offset = 81
+screen_belly_x_offset = 82
 screen_belly_depth = 4
 
 depth = screen_body_depth + 4.2
@@ -32,7 +32,7 @@ fin_width = 50
 fin_thickness = 3
 
 brim_width = 3
-brim_thickness = 2
+brim_thickness = 1.5
 
 version = 6
 
@@ -73,6 +73,9 @@ screen_recess = (
     .tag("recess")
     .rect(screen_body_width, screen_body_height)
     .cutBlind(-screen_body_depth-brim_thickness)
+    .faces(">Z").workplane()
+    .rect(width+22,screen_body_height+3)
+    .cutBlind(-1.5)
     .workplaneFromTagged("recess")
     .rect(screen_standoff_width, screen_standoff_height, forConstruction=True)
     .vertices()
@@ -83,10 +86,9 @@ screen_recess = (
 belly_recess = (
     screen_recess
     .workplaneFromTagged("firstbox")
-    .center(screen_belly_x_offset,0)
+    .moveTo(screen_belly_x_offset,9)
     .rect(screen_belly_width,screen_belly_height)
     .cutBlind(-screen_belly_depth)
-    .center(-screen_belly_x_offset,0)
     )
 
 with_fins = (
@@ -105,8 +107,8 @@ ports = (
     with_fins
     .faces(">Z")
     .workplane()
-    .moveTo(0, 2+(2*screen_body_offset - length - screen_body_height)/4)
-    .rect(width - 30,22)
+    .moveTo(0, 4+(2*screen_body_offset - length - screen_body_height)/4)
+    .rect(width - 30,20)
     .cutThruAll()
     )
 
@@ -119,5 +121,6 @@ final = (
     .cutThruAll()
     )
 
+show_object(final)
 
-cq.exporters.export(final, "frame-test.stl")
+cq.exporters.export(final, "frame-test.step")
