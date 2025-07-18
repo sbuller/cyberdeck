@@ -86,9 +86,10 @@ result = (
     
     # pocket
     .faces(">Z").workplane()
-    .moveTo(0,90)
+    .center(0,30)
+    .moveTo(0,56)
     .sketch()
-    .rect(220,46)
+    .rect(216,50)
     .vertices()
     .fillet(4)
     .finalize()
@@ -96,9 +97,19 @@ result = (
     
     # pico-bay
     .faces("<Z").workplane()
-    .moveTo(0,-62)
-    .rect(220,20)
+    .moveTo(0,-32)
+    .rect(216,18)
     .cutBlind(-12)
+    
+    # plate recess
+    .faces(">Z").workplane()
+    .moveTo(0,56)
+    .sketch()
+    .rect(224,58)
+    .vertices()
+    .fillet(5)
+    .finalize()
+    .cutBlind(-2)
     )
 
 #show_object(result)
