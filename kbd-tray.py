@@ -10,6 +10,7 @@ kbd_tray_max_depth = 27
 kbd_tray_brim_width = 2.5
 kbd_tray_brim_fillet = 11
 kbd_tray_draft_angle = 2 # degrees
+kbd_tray_y_offset = -30
 
 wire_gap = 2.3
 
@@ -44,13 +45,13 @@ result = (
     .faces(">Z")
     .workplane()
     .rect(kbd_tray_width+kbd_tray_brim_width*2, kbd_tray_length+kbd_tray_brim_width*2)
-    .extrude(1)
+    .extrude(0.75)
     .edges("|Z")
     .fillet(kbd_tray_brim_fillet)
     # Keyboard Tray
     .faces(">Z")
     .workplane()
-    .center(0,-30)
+    .center(0,kbd_tray_y_offset)
     .rect(max_x+19.1, max_y+19.1).cutBlind(-10)
     # Key locations
     .faces("+Z").faces("<Z")
@@ -86,7 +87,7 @@ result = (
     
     # pocket
     .faces(">Z").workplane()
-    .center(0,30)
+    .center(0,-kbd_tray_y_offset)
     .moveTo(0,56)
     .sketch()
     .rect(216,50)
@@ -110,8 +111,27 @@ result = (
     .fillet(5)
     .finalize()
     .cutBlind(-2)
+    .edges("|X and >Z").edges("<<Y[-2]")
+    .chamfer(7,2.5)
+    .faces("not(#Z or |Z)")
+    .edges("|X")
+    .fillet(3)
     )
 
-#show_object(result)
+
+
+# thumb clearance
+
+
+#top_edges = (result
+#    .edges(">Z and |X")
+#    .vals()
+#    )
+#target_edge = top_edges.sort(
+#    reverse=True,
+#    key=lambda e: e.Center().__getstate__().y
+#    )
+
+show_object(result)
 
 cq.exporters.export(result, "kbd-tray.stl")
