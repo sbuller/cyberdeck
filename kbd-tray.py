@@ -31,9 +31,16 @@ key_cutout = (cq.Sketch()
               .vertices()
               .rect(1.6*2,3.5)
               .reset()
-              .rect(14.1,14.1)
+              .rect(14.05,14.05)
               .clean()
               )
+
+diode_cutout = (cq.Sketch()
+                .rect(2,3.25)
+                .rect(0.8,9)
+                .clean()
+                .moved(5,0)
+                )
 
 result = (
     cq.Workplane("XY")
@@ -64,10 +71,26 @@ result = (
     .workplane(-3)
     .pushPoints(kbd_key_positions)
     .rect(14.1,7)
-    .extrude(-3)
+    .extrude(-2.75)
     # Peg holes
     .faces("+Z").faces("<Z")
     .hole(5.2)
+    # Diodes
+    .faces("<Z").workplane()
+    .pushPoints([(x+5,-y) for (x,y) in kbd_key_positions])
+    .rect(2,3.5)
+    .cutBlind(-2)
+    .pushPoints([(x+5,-y) for (x,y) in kbd_key_positions])
+    .rect(0.8,9)
+    .cutBlind(-0.8)
+    # Mount
+    .faces("<Z").workplane()
+    .pushPoints([
+        (-4.4375*19.05, max_y/2 - 19.05),
+        (-5*19.05, max_y/2 - 3.625 * 19.05),
+        (-3.5*19.05, max_y/2 - 3.625 * 19.05)
+        ])
+    .hole(3.5,2)
     # h filler
     .faces(">Z").workplane(-5)
     .moveTo(0,max_y/2 - 5*19.05/8)
@@ -78,10 +101,11 @@ result = (
     .moveTo(-max_x/2 + 6.25*19.05, max_y/2)
     .rect(9.5,19.1)
     # space filler 1&2
-    .moveTo(-max_x/2+3.125*19.05, -max_y/2)
-    .rect(4.75,19)
-    .moveTo(-max_x/2+5.625*19.05, -max_y/2)
-    .rect(4.75,19)
+    # I'm removing these because I bought new keycaps
+    #.moveTo(-max_x/2+3.125*19.05, -max_y/2)
+    #.rect(4.75,19)
+    #.moveTo(-max_x/2+5.625*19.05, -max_y/2)
+    #.rect(4.75,19)
     # extrude all the fillers
     .extrude(-5.1)
     
@@ -116,6 +140,18 @@ result = (
     .faces("not(#Z or |Z)")
     .edges("|X")
     .fillet(3)
+     # Row Wires
+    .faces(">X").workplane()
+    .center(kbd_tray_y_offset-max_y/2+6,-15)
+    .pushPoints([
+        (0*19.05, 0),
+        (1*19.05, 0),
+        (2*19.05, 0),
+        (3*19.05, 0),
+        (4.25*19.05, 0),
+        ])
+    .slot2D(4,2.2,90)
+    .cutThruAll()
     )
 
 
