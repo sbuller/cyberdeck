@@ -90,7 +90,7 @@ result = (
         (-5*19.05, max_y/2 - 3.625 * 19.05),
         (-3.5*19.05, max_y/2 - 3.625 * 19.05)
         ])
-    .hole(3.5,2)
+    .hole(3.6)
     # h filler
     .faces(">Z").workplane(-5)
     .moveTo(0,max_y/2 - 5*19.05/8)
