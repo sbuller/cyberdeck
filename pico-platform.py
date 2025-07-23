@@ -1,32 +1,34 @@
 import cadquery as cq
 
 peg_points = [
-    (3.571875,-25.003125),
+    (-3.571875,-25.003125),
     (14.2875,25.003125),
     (-14.2875,25.003125)
     ]
 
 result = (cq.Workplane("XY")
     # Base
-    .rect(36,60)
+    .rect(35,56)
     .extrude(1)
     .edges("|Z")
     .fillet(3.5)
     # Mounting pegs
     .pushPoints(peg_points)
-    .circle(3.5/2)
+    .circle(3.3/2)
     .extrude(7.7)
+    .faces("+Z").faces("<Z")
+    .fillet(0.6)
     # pico shafts for inserts
     .faces("<Z").workplane()
-    .rect(17.78, 48.26, forConstruction=True)
+    .rect(11.4, 47, forConstruction=True)
     .vertices()
-    .circle(7.2/2)
-    .extrude(-6.7)
+    .circle((3+1.6*2)/2+0.2)
+    .extrude(-6.1)
     # holes for the inserts
     .faces("<Z").workplane()
-    .rect(17.78, 48.26, forConstruction=True)
+    .rect(11.4, 47, forConstruction=True)
     .vertices()
-    .hole(4)
+    .hole(3+0.2)
     )
 
 show_object(result)
